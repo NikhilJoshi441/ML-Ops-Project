@@ -1,0 +1,40 @@
+{
+    "items": [
+        {
+            "id": "q_bf4f8fc6c3ad4ffb",
+            "ts": 1792129367.7869818,
+            "client_id": "demo",
+            "errors": [
+                {
+                    "field": "client_reference",
+                    "error": "String should match pattern '^[A-Za-z0-9_\\-]{4,64}$'",
+                    "type": "string_pattern_mismatch"
+                },
+                {
+                    "field": "customer.customer_id",
+                    "error": "String should match pattern '^CUST-\\d{6}$'",
+                    "type": "string_pattern_mismatch"
+                },
+                {
+                    "field": "customer.account_type",
+                    "error": "Input should be 'BSBD', 'SAVINGS', 'PREPAID_PPI', 'CURRENT_MSME', 'CURRENT_INDIVIDUAL_UPTO_25L', 'CURRENT_OTHER' or 'CREDIT_CARD'",
+                    "type": "enum"
+                },
+                {
+                    "field": "transaction.amount_inr",
+                    "error": "Input should be greater than 0",
+                    "type": "greater_than"
+                },
+                {
+                    "field": "complaint_text",
+                    "error": "String should have at least 20 characters",
+                    "type": "string_too_short"
+                }
+            ],
+            "payload": {
+                "client_reference": "x",
+                "customer": {
+                    "customer_id": "12345",
+                    "account_type": "GOLD"
+                },
+                "transaction": {

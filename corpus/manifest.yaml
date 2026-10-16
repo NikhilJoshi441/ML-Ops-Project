@@ -1,0 +1,100 @@
+# Corpus manifest: the single source of truth for what is indexed.
+# `version` is the publication/revision date printed on the document; the
+# pipeline additionally records the sha256 of each file at build time, so a
+# re-download that changes the bytes is detected as a new version.
+documents:
+  - doc_id: RBI-CIRC-2017
+    short: "RBI Circular 2017"
+    title: "RBI circular DBR.No.Leg.BC.78/09.07.005/2017-18 - Customer Protection: Limiting Liability of Customers in Unauthorised Electronic Banking Transactions"
+    file: raw/rbi_circular_2017_limiting_liability.html
+    format: html
+    version: "2017-07-06"
+    source_url: "https://www.rbi.org.in/Scripts/NotificationUser.aspx?Id=11040&Mode=0"
+    start_marker: "RBI/2017-18/15"
+    end_marker: "Yours faithfully"     # the Annex lists superseded instructions; excluded on purpose
+    chunk_depth: 2                      # para -> (roman) item
+    label_prefix: "para "
+  - doc_id: FED-CPP-2025
+    short: "Federal Bank Customer Protection Policy 2025"
+    title: "The Federal Bank Ltd - Policy on Customer Protection: Limiting Liability of Customers in Unauthorised Electronic Banking Transactions (Board-approved policy)"
+    file: raw/federal_bank_policy.pdf
+    format: pdf
+    version: "2025-09"
+    source_url: "https://www.federal.bank.in/documents/10180/0/Policy%20on%20Customer%20Protection%20%20Limiting%20Liability%20of%20Customers%20in%20Unauthorised%20Electronic%20Banking%20Transactions.pdf"
+    start_marker: "1. Introduction"
+    end_marker: "****"
+    chunk_depth: 3                      # section -> letter -> (roman)
+    label_prefix: "section "
+  - doc_id: RBI-IOS-2021
+    short: "RBI Integrated Ombudsman Scheme 2021"
+    title: "Reserve Bank - Integrated Ombudsman Scheme, 2021 (as amended by notification dated 5 Aug 2022)"
+    file: raw/rbi_integrated_ombudsman_scheme_2021.pdf
+    format: pdf
+    version: "2021-11-12 (amended 2022-08-05)"
+    source_url: "https://www.jkbank.com/pdfs/policy/Integrated%20Banking%20Ombudsman%20Scheme%202021Revised.pdf"
+    start_marker: "CHAPTER I"
+    end_marker: "FORM OF COMPLAINT"   # the annexed complaint form is not a provision
+    chunk_depth: 2                      # clause -> (n) sub-clause; lettered items folded in
+    label_prefix: "clause "
+
+# Defined terms. The liability table is meaningless without these, and they
+# sit pages away from it (brief, section 3). Each chunk records which terms it
+# uses; chunks matching `defined_by` are recorded as the definition source so
+# the retriever can attach the definition to any chunk that uses the term.
+terms:
+  working_days:
+    match: "working day"
+    defined_by: "working days .{0,80}counted|counted as per the working schedule"
+  third_party_breach:
+    match: "third party breach|lies neither with the bank nor with the customer|elsewhere in the system"
+    defined_by: "neither with the (bank|Bank) nor with the customer,? but lies elsewhere in the system"
+  customer_negligence:
+    match: "negligence by a customer|customer negligence|shared the payment credentials|Password / PIN / OTP"
+    defined_by: "loss is due to negligence by a customer|treated as .{0,3}transaction performed due to customer negligence"
+  bank_communication:
+    match: "communication from the (bank|Bank)|SMS alert|receiving the communication"
+    defined_by: "record the time and date of delivery of the message"
+  board_approved_policy:
+    match: "Board approved policy|Board-approved|approval of their Boards"
+    defined_by: "if the delay in reporting .{0,40}beyond seven working days"
+  shadow_reversal:
+    match: "shadow reversal|shadow credit|credit .{0,40}within 10 working days"
+    defined_by: "credit \\(shadow reversal\\)|provided as shadow credit"
+  deficiency_in_service:
+    match: "deficiency in service"
+    defined_by: "Deficiency in service.{0,3} means"
+
+# Curated cross-document relations that text cross-references cannot express.
+# `delegates_to`: the source provision defers to the target for its outcome.
+# `implements`: the target is the bank's implementation of the source.
+relations:
+  - {source: "RBI-CIRC-2017:7(ii)", target: "FED-CPP-2025:4.b(iii)", kind: delegates_to,
+     note: "Beyond seven working days the circular defers to the bank's Board-approved policy"}
+  - {source: "RBI-CIRC-2017:Table-2", target: "FED-CPP-2025:Table-2", kind: delegates_to,
+     note: "Table 2 'beyond 7 working days' row defers to the bank's policy"}
+  - {source: "RBI-CIRC-2017:7(i)", target: "FED-CPP-2025:4.b(i)", kind: implements,
+     note: "Bank policy treats OTP/PIN-authenticated transactions as customer negligence"}
+  - {source: "RBI-CIRC-2017:9", target: "FED-CPP-2025:7", kind: implements,
+     note: "Shadow reversal within 10 working days"}
+  - {source: "RBI-CIRC-2017:12", target: "FED-CPP-2025:7", kind: implements,
+     note: "Burden of proof lies on the bank"}
+  - {source: "RBI-CIRC-2017:10", target: "RBI-IOS-2021:9", kind: escalation_path,
+     note: "Unresolved complaints may go to the RBI Ombudsman"}
+
+# Provision families used by the liability rule check and the coverage check.
+# The rules reason over these keys only; the clause ids behind them are data,
+# so adopting another bank's policy is a manifest change, not a code change.
+# A family is "covered" when at least one listed clause has been retrieved.
+provisions:
+  ZERO_BANK_FAULT:      {clauses: ["RBI-CIRC-2017:6(i)", "FED-CPP-2025:4.a(i)"], gap: "zero liability where the bank is at fault or deficient"}
+  ZERO_THIRD_PARTY:     {clauses: ["RBI-CIRC-2017:6(ii)", "FED-CPP-2025:4.a(ii)"], gap: "zero liability for a third party breach notified within three working days"}
+  LIMITED_THIRD_PARTY:  {clauses: ["RBI-CIRC-2017:7(ii)", "FED-CPP-2025:4.b(ii)"], gap: "limited liability for a third party breach notified within four to seven working days"}
+  LIABILITY_CAP_TABLE:  {clauses: ["RBI-CIRC-2017:Table-1", "FED-CPP-2025:Table-1"], gap: "the maximum liability by account type (Table 1)"}
+  BEYOND_SEVEN_DAYS:    {clauses: ["RBI-CIRC-2017:Table-2", "FED-CPP-2025:4.b(iii)", "FED-CPP-2025:Table-2"], gap: "customer liability where reporting is delayed beyond seven working days (bank's Board-approved policy)"}
+  NEGLIGENCE:           {clauses: ["RBI-CIRC-2017:7(i)", "FED-CPP-2025:4.b(i)"], gap: "loss due to customer negligence such as sharing payment credentials"}
+  WORKING_DAYS:         {clauses: ["RBI-CIRC-2017:Table-2", "FED-CPP-2025:4.b(iii)"], gap: "how working days are counted from the bank's communication"}
+  SHADOW_REVERSAL:      {clauses: ["RBI-CIRC-2017:9", "FED-CPP-2025:7"], gap: "shadow reversal / credit within 10 working days of notification"}
+  BURDEN_OF_PROOF:      {clauses: ["RBI-CIRC-2017:12"], gap: "the burden of proving customer liability lies on the bank"}
+  ERRONEOUS_DEBIT:      {clauses: ["RBI-CIRC-2017:preamble", "RBI-IOS-2021:3(1)~p2", "RBI-IOS-2021:9"], gap: "reversal of erroneous debits / deficiency in service"}
+  SCOPE_UNAUTHORISED:   {clauses: ["RBI-CIRC-2017:6", "RBI-CIRC-2017:7", "RBI-CIRC-2017:2"], gap: "the liability framework applies to unauthorised electronic transactions"}
+  OMBUDSMAN:            {clauses: ["RBI-IOS-2021:9", "RBI-IOS-2021:10(2)~p1"], gap: "the customer's recourse to the RBI Ombudsman"}

@@ -1,0 +1,21 @@
+global:
+  scrape_interval: 5s
+  evaluation_interval: 15s
+
+# DNS service discovery returns one target per replica, so
+# `docker compose up --scale agent-worker=3` is scraped per container.
+scrape_configs:
+  - job_name: api
+    dns_sd_configs: [{ names: [api], type: A, port: 8080 }]
+  - job_name: retriever
+    dns_sd_configs: [{ names: [retriever], type: A, port: 8081 }]
+  - job_name: llm-gateway
+    dns_sd_configs: [{ names: [llm-gateway], type: A, port: 8082 }]
+  - job_name: llm-stub
+    dns_sd_configs: [{ names: [llm-stub], type: A, port: 8090 }]
+  - job_name: triage-agent
+    dns_sd_configs: [{ names: [triage-agent], type: A, port: 9102 }]
+  - job_name: agent-worker
+    dns_sd_configs: [{ names: [agent-worker], type: A, port: 9102 }]
+  - job_name: cadvisor
+    static_configs: [{ targets: ["cadvisor:8080"] }]

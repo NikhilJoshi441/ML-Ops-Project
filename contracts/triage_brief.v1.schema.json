@@ -1,0 +1,217 @@
+{
+ "$defs": {
+  "Category": {
+   "enum": [
+    "CARD_NOT_PRESENT_FRAUD",
+    "SKIMMING",
+    "UPI_SOCIAL_ENGINEERING",
+    "MERCHANT_DISPUTE",
+    "DUPLICATE_CHARGE",
+    "OUT_OF_SCOPE"
+   ],
+   "title": "Category",
+   "type": "string"
+  },
+  "Facts": {
+   "properties": {
+    "credentials_shared": {
+     "default": "UNKNOWN",
+     "title": "Credentials Shared",
+     "type": "string"
+    },
+    "shared_with_impersonator": {
+     "default": "UNKNOWN",
+     "title": "Shared With Impersonator",
+     "type": "string"
+    },
+    "card_in_possession": {
+     "default": "UNKNOWN",
+     "title": "Card In Possession",
+     "type": "string"
+    },
+    "alert_noticed": {
+     "default": "UNKNOWN",
+     "title": "Alert Noticed",
+     "type": "string"
+    },
+    "bank_system_failure_alleged": {
+     "default": "UNKNOWN",
+     "title": "Bank System Failure Alleged",
+     "type": "string"
+    },
+    "customer_denies_involvement": {
+     "default": "UNKNOWN",
+     "title": "Customer Denies Involvement",
+     "type": "string"
+    },
+    "authorised_by_customer": {
+     "default": "UNKNOWN",
+     "title": "Authorised By Customer",
+     "type": "string"
+    },
+    "signals": {
+     "items": {
+      "type": "string"
+     },
+     "title": "Signals",
+     "type": "array"
+    }
+   },
+   "title": "Facts",
+   "type": "object"
+  },
+  "Fault": {
+   "enum": [
+    "BANK",
+    "THIRD_PARTY",
+    "CUSTOMER_NEGLIGENCE",
+    "CONTESTED",
+    "NOT_UNAUTHORISED",
+    "UNKNOWN"
+   ],
+   "title": "Fault",
+   "type": "string"
+  },
+  "GuardrailReport": {
+   "properties": {
+    "injection_score": {
+     "default": 0.0,
+     "title": "Injection Score",
+     "type": "number"
+    },
+    "injection_signals": {
+     "items": {
+      "type": "string"
+     },
+     "title": "Injection Signals",
+     "type": "array"
+    },
+    "toxicity_score": {
+     "default": 0.0,
+     "title": "Toxicity Score",
+     "type": "number"
+    },
+    "toxicity_signals": {
+     "items": {
+      "type": "string"
+     },
+     "title": "Toxicity Signals",
+     "type": "array"
+    },
+    "complaint_withheld_from_model": {
+     "default": false,
+     "title": "Complaint Withheld From Model",
+     "type": "boolean"
+    }
+   },
+   "title": "GuardrailReport",
+   "type": "object"
+  },
+  "ReportingDelay": {
+   "properties": {
+    "working_days": {
+     "title": "Working Days",
+     "type": "integer"
+    },
+    "calendar_days": {
+     "title": "Calendar Days",
+     "type": "integer"
+    },
+    "from_date": {
+     "title": "From Date",
+     "type": "string"
+    },
+    "to_date": {
+     "title": "To Date",
+     "type": "string"
+    },
+    "basis": {
+     "title": "Basis",
+     "type": "string"
+    },
+    "excluded_holidays": {
+     "items": {
+      "type": "string"
+     },
+     "title": "Excluded Holidays",
+     "type": "array"
+    }
+   },
+   "required": [
+    "working_days",
+    "calendar_days",
+    "from_date",
+    "to_date",
+    "basis"
+   ],
+   "title": "ReportingDelay",
+   "type": "object"
+  }
+ },
+ "description": "Hand-off message from the triage agent to the liability agent.",
+ "properties": {
+  "run_id": {
+   "title": "Run Id",
+   "type": "string"
+  },
+  "category": {
+   "$ref": "#/$defs/Category"
+  },
+  "category_confidence": {
+   "default": 0.0,
+   "title": "Category Confidence",
+   "type": "number"
+  },
+  "category_rationale": {
+   "default": "",
+   "title": "Category Rationale",
+   "type": "string"
+  },
+  "facts": {
+   "$ref": "#/$defs/Facts"
+  },
+  "fault_hypothesis": {
+   "$ref": "#/$defs/Fault"
+  },
+  "contest_reasons": {
+   "items": {
+    "type": "string"
+   },
+   "title": "Contest Reasons",
+   "type": "array"
+  },
+  "reporting_delay": {
+   "$ref": "#/$defs/ReportingDelay"
+  },
+  "guardrails": {
+   "$ref": "#/$defs/GuardrailReport"
+  },
+  "sanitized_complaint": {
+   "title": "Sanitized Complaint",
+   "type": "string"
+  },
+  "degraded": {
+   "default": false,
+   "title": "Degraded",
+   "type": "boolean"
+  },
+  "prompt_versions": {
+   "additionalProperties": {
+    "type": "string"
+   },
+   "title": "Prompt Versions",
+   "type": "object"
+  }
+ },
+ "required": [
+  "run_id",
+  "category",
+  "facts",
+  "fault_hypothesis",
+  "reporting_delay",
+  "guardrails",
+  "sanitized_complaint"
+ ],
+ "title": "TriageBrief",
+ "type": "object"
+}

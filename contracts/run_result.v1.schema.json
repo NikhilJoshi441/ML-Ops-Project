@@ -1,0 +1,319 @@
+{
+ "$defs": {
+  "Category": {
+   "enum": [
+    "CARD_NOT_PRESENT_FRAUD",
+    "SKIMMING",
+    "UPI_SOCIAL_ENGINEERING",
+    "MERCHANT_DISPUTE",
+    "DUPLICATE_CHARGE",
+    "OUT_OF_SCOPE"
+   ],
+   "title": "Category",
+   "type": "string"
+  },
+  "Citation": {
+   "properties": {
+    "chunk_id": {
+     "title": "Chunk Id",
+     "type": "string"
+    },
+    "clause_id": {
+     "title": "Clause Id",
+     "type": "string"
+    },
+    "label": {
+     "title": "Label",
+     "type": "string"
+    },
+    "quote": {
+     "title": "Quote",
+     "type": "string"
+    },
+    "source_url": {
+     "default": "",
+     "title": "Source Url",
+     "type": "string"
+    }
+   },
+   "required": [
+    "chunk_id",
+    "clause_id",
+    "label",
+    "quote"
+   ],
+   "title": "Citation",
+   "type": "object"
+  },
+  "Claim": {
+   "properties": {
+    "text": {
+     "title": "Text",
+     "type": "string"
+    },
+    "citations": {
+     "items": {
+      "type": "string"
+     },
+     "title": "Citations",
+     "type": "array"
+    },
+    "supported": {
+     "anyOf": [
+      {
+       "type": "boolean"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Supported"
+    },
+    "support_score": {
+     "anyOf": [
+      {
+       "type": "number"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Support Score"
+    }
+   },
+   "required": [
+    "text",
+    "citations"
+   ],
+   "title": "Claim",
+   "type": "object"
+  },
+  "EscalationReason": {
+   "enum": [
+    "FAULT_CONTESTED",
+    "PROVISIONS_CONFLICT",
+    "OUT_OF_CORPUS",
+    "VERIFICATION_FAILED",
+    "DEGRADED_MODE",
+    "GUARDRAIL_TRIGGERED",
+    "BUDGET_EXHAUSTED",
+    "INCOMPLETE_RUN"
+   ],
+   "title": "EscalationReason",
+   "type": "string"
+  },
+  "Fault": {
+   "enum": [
+    "BANK",
+    "THIRD_PARTY",
+    "CUSTOMER_NEGLIGENCE",
+    "CONTESTED",
+    "NOT_UNAUTHORISED",
+    "UNKNOWN"
+   ],
+   "title": "Fault",
+   "type": "string"
+  },
+  "LiabilityBand": {
+   "enum": [
+    "ZERO",
+    "LIMITED",
+    "FULL_UNTIL_REPORTED",
+    "PER_BOARD_POLICY",
+    "NOT_APPLICABLE",
+    "UNDETERMINED"
+   ],
+   "title": "LiabilityBand",
+   "type": "string"
+  },
+  "Route": {
+   "enum": [
+    "CHARGEBACK_INITIATION",
+    "PROVISIONAL_CREDIT",
+    "DECLINE_WITH_REASON",
+    "ESCALATE_TO_ANALYST"
+   ],
+   "title": "Route",
+   "type": "string"
+  },
+  "VerificationReport": {
+   "properties": {
+    "passed": {
+     "title": "Passed",
+     "type": "boolean"
+    },
+    "attempts": {
+     "title": "Attempts",
+     "type": "integer"
+    },
+    "checks": {
+     "additionalProperties": true,
+     "title": "Checks",
+     "type": "object"
+    },
+    "failures": {
+     "items": {
+      "type": "string"
+     },
+     "title": "Failures",
+     "type": "array"
+    }
+   },
+   "required": [
+    "passed",
+    "attempts"
+   ],
+   "title": "VerificationReport",
+   "type": "object"
+  }
+ },
+ "description": "What the caller receives. Never an instruction to credit or close: an\nanalyst decides (section 2 of the brief).",
+ "properties": {
+  "run_id": {
+   "title": "Run Id",
+   "type": "string"
+  },
+  "completed": {
+   "title": "Completed",
+   "type": "boolean"
+  },
+  "route": {
+   "$ref": "#/$defs/Route"
+  },
+  "liability_band": {
+   "$ref": "#/$defs/LiabilityBand"
+  },
+  "customer_liability_inr": {
+   "anyOf": [
+    {
+     "type": "number"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "default": null,
+   "title": "Customer Liability Inr"
+  },
+  "category": {
+   "anyOf": [
+    {
+     "$ref": "#/$defs/Category"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "default": null
+  },
+  "fault_attribution": {
+   "anyOf": [
+    {
+     "$ref": "#/$defs/Fault"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "default": null
+  },
+  "reporting_delay_working_days": {
+   "anyOf": [
+    {
+     "type": "integer"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "default": null,
+   "title": "Reporting Delay Working Days"
+  },
+  "summary": {
+   "title": "Summary",
+   "type": "string"
+  },
+  "basis": {
+   "title": "Basis",
+   "type": "string"
+  },
+  "claims": {
+   "items": {
+    "$ref": "#/$defs/Claim"
+   },
+   "title": "Claims",
+   "type": "array"
+  },
+  "citations": {
+   "items": {
+    "$ref": "#/$defs/Citation"
+   },
+   "title": "Citations",
+   "type": "array"
+  },
+  "escalation_reasons": {
+   "items": {
+    "$ref": "#/$defs/EscalationReason"
+   },
+   "title": "Escalation Reasons",
+   "type": "array"
+  },
+  "escalation_path": {
+   "default": "",
+   "title": "Escalation Path",
+   "type": "string"
+  },
+  "verification": {
+   "anyOf": [
+    {
+     "$ref": "#/$defs/VerificationReport"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "default": null
+  },
+  "degraded": {
+   "default": false,
+   "title": "Degraded",
+   "type": "boolean"
+  },
+  "decision_authority": {
+   "default": "Disputes analyst. This output is a recommendation only.",
+   "title": "Decision Authority",
+   "type": "string"
+  },
+  "prompt_versions": {
+   "additionalProperties": {
+    "type": "string"
+   },
+   "title": "Prompt Versions",
+   "type": "object"
+  },
+  "cost_usd": {
+   "default": 0.0,
+   "title": "Cost Usd",
+   "type": "number"
+  },
+  "tokens": {
+   "additionalProperties": {
+    "type": "integer"
+   },
+   "title": "Tokens",
+   "type": "object"
+  }
+ },
+ "required": [
+  "run_id",
+  "completed",
+  "route",
+  "liability_band",
+  "summary",
+  "basis"
+ ],
+ "title": "Recommendation",
+ "type": "object"
+}

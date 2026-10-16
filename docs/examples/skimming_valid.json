@@ -1,0 +1,9 @@
+{
+  "client_reference": "demo-skimming-001",
+  "customer": {"customer_id": "CUST-000101", "account_type": "SAVINGS"},
+  "transaction": {"transaction_id": "TXN-DEMOSK1", "channel": "CARD_ATM", "amount_inr": 20000,
+                  "transaction_at": "2026-10-14T23:10:00Z", "card_last4": "9921", "auth_method": "PIN"},
+  "reporting": {"alert_received_at": "2026-10-14T23:11:00Z", "reported_at": "2026-10-15T09:00:00Z", "reporting_channel": "PHONE"},
+  "complaint_text": "Rs 20,000 was withdrawn from an ATM in another city at midnight. My debit card was with me at home the whole time. I never told anyone my PIN; I think the card was skimmed.",
+  "customer_assertions": {"card_in_possession": "YES", "credentials_shared": "NO", "recognises_merchant": "NO"}
+}

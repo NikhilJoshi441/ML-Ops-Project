@@ -1,0 +1,331 @@
+{
+ "$defs": {
+  "AccountType": {
+   "enum": [
+    "BSBD",
+    "SAVINGS",
+    "PREPAID_PPI",
+    "CURRENT_MSME",
+    "CURRENT_INDIVIDUAL_UPTO_25L",
+    "CURRENT_OTHER",
+    "CREDIT_CARD"
+   ],
+   "title": "AccountType",
+   "type": "string"
+  },
+  "AuthMethod": {
+   "enum": [
+    "OTP",
+    "PIN",
+    "UPI_PIN",
+    "CVV_ONLY",
+    "CONTACTLESS",
+    "MAGSTRIPE",
+    "NONE",
+    "UNKNOWN"
+   ],
+   "title": "AuthMethod",
+   "type": "string"
+  },
+  "Channel": {
+   "enum": [
+    "CARD_POS",
+    "CARD_ATM",
+    "CARD_ONLINE",
+    "UPI",
+    "NET_BANKING",
+    "MOBILE_BANKING"
+   ],
+   "title": "Channel",
+   "type": "string"
+  },
+  "Customer": {
+   "additionalProperties": false,
+   "properties": {
+    "customer_id": {
+     "description": "Synthetic customer id, CUST-NNNNNN",
+     "pattern": "^CUST-\\d{6}$",
+     "title": "Customer Id",
+     "type": "string"
+    },
+    "account_type": {
+     "$ref": "#/$defs/AccountType"
+    },
+    "credit_limit_inr": {
+     "anyOf": [
+      {
+       "exclusiveMinimum": 0,
+       "maximum": 10000000,
+       "type": "number"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Credit Limit Inr"
+    }
+   },
+   "required": [
+    "customer_id",
+    "account_type"
+   ],
+   "title": "Customer",
+   "type": "object"
+  },
+  "CustomerAssertions": {
+   "additionalProperties": false,
+   "properties": {
+    "card_in_possession": {
+     "$ref": "#/$defs/TriState",
+     "default": "UNKNOWN"
+    },
+    "credentials_shared": {
+     "$ref": "#/$defs/TriState",
+     "default": "UNKNOWN"
+    },
+    "recognises_merchant": {
+     "$ref": "#/$defs/TriState",
+     "default": "UNKNOWN"
+    }
+   },
+   "title": "CustomerAssertions",
+   "type": "object"
+  },
+  "Experiment": {
+   "additionalProperties": false,
+   "description": "Evaluation-only overrides. Ignored unless ALLOW_EXPERIMENT_OVERRIDES=true.",
+   "properties": {
+    "prompt_variant": {
+     "anyOf": [
+      {
+       "pattern": "^v\\d+$",
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Prompt Variant"
+    },
+    "retrieval_profile": {
+     "anyOf": [
+      {
+       "pattern": "^(clause|naive)$",
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Retrieval Profile"
+    }
+   },
+   "title": "Experiment",
+   "type": "object"
+  },
+  "Reporting": {
+   "additionalProperties": false,
+   "properties": {
+    "alert_received_at": {
+     "anyOf": [
+      {
+       "format": "date-time",
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "description": "When the bank's SMS/e-mail communication about the transaction reached the customer",
+     "title": "Alert Received At"
+    },
+    "reported_at": {
+     "format": "date-time",
+     "title": "Reported At",
+     "type": "string"
+    },
+    "reporting_channel": {
+     "$ref": "#/$defs/ReportingChannel"
+    }
+   },
+   "required": [
+    "reported_at",
+    "reporting_channel"
+   ],
+   "title": "Reporting",
+   "type": "object"
+  },
+  "ReportingChannel": {
+   "enum": [
+    "BRANCH",
+    "PHONE",
+    "SMS_REPLY",
+    "EMAIL",
+    "WEBSITE",
+    "MOBILE_APP"
+   ],
+   "title": "ReportingChannel",
+   "type": "string"
+  },
+  "Transaction": {
+   "additionalProperties": false,
+   "properties": {
+    "transaction_id": {
+     "pattern": "^TXN-[A-Z0-9]{6,20}$",
+     "title": "Transaction Id",
+     "type": "string"
+    },
+    "channel": {
+     "$ref": "#/$defs/Channel"
+    },
+    "amount_inr": {
+     "exclusiveMinimum": 0,
+     "maximum": 10000000,
+     "title": "Amount Inr",
+     "type": "number"
+    },
+    "currency": {
+     "default": "INR",
+     "pattern": "^INR$",
+     "title": "Currency",
+     "type": "string"
+    },
+    "transaction_at": {
+     "format": "date-time",
+     "title": "Transaction At",
+     "type": "string"
+    },
+    "merchant_name": {
+     "anyOf": [
+      {
+       "maxLength": 120,
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Merchant Name"
+    },
+    "card_last4": {
+     "anyOf": [
+      {
+       "pattern": "^\\d{4}$",
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Card Last4"
+    },
+    "auth_method": {
+     "$ref": "#/$defs/AuthMethod",
+     "default": "UNKNOWN"
+    },
+    "duplicate_of_transaction_id": {
+     "anyOf": [
+      {
+       "pattern": "^TXN-[A-Z0-9]{6,20}$",
+       "type": "string"
+      },
+      {
+       "type": "null"
+      }
+     ],
+     "default": null,
+     "title": "Duplicate Of Transaction Id"
+    }
+   },
+   "required": [
+    "transaction_id",
+    "channel",
+    "amount_inr",
+    "transaction_at"
+   ],
+   "title": "Transaction",
+   "type": "object"
+  },
+  "TriState": {
+   "enum": [
+    "YES",
+    "NO",
+    "UNKNOWN"
+   ],
+   "title": "TriState",
+   "type": "string"
+  }
+ },
+ "additionalProperties": false,
+ "properties": {
+  "schema_version": {
+   "default": "1.0",
+   "pattern": "^1\\.\\d+$",
+   "title": "Schema Version",
+   "type": "string"
+  },
+  "client_reference": {
+   "description": "Caller's idempotency key",
+   "pattern": "^[A-Za-z0-9_\\-]{4,64}$",
+   "title": "Client Reference",
+   "type": "string"
+  },
+  "customer": {
+   "$ref": "#/$defs/Customer"
+  },
+  "transaction": {
+   "$ref": "#/$defs/Transaction"
+  },
+  "reporting": {
+   "$ref": "#/$defs/Reporting"
+  },
+  "complaint_text": {
+   "maxLength": 4000,
+   "minLength": 20,
+   "title": "Complaint Text",
+   "type": "string"
+  },
+  "customer_assertions": {
+   "$ref": "#/$defs/CustomerAssertions"
+  },
+  "callback_url": {
+   "anyOf": [
+    {
+     "pattern": "^https?://[^\\s]{3,300}$",
+     "type": "string"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "default": null,
+   "title": "Callback Url"
+  },
+  "experiment": {
+   "anyOf": [
+    {
+     "$ref": "#/$defs/Experiment"
+    },
+    {
+     "type": "null"
+    }
+   ],
+   "default": null
+  }
+ },
+ "required": [
+  "client_reference",
+  "customer",
+  "transaction",
+  "reporting",
+  "complaint_text"
+ ],
+ "title": "DisputeReport",
+ "type": "object"
+}

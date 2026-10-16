@@ -1,0 +1,7 @@
+.git
+.local
+.env
+**/__pycache__
+eval/results
+loadtest/results
+*.pyc

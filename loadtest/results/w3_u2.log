@@ -1,0 +1,23 @@
+[2026-10-16 11:05:50,789] Kshitijs-MacBook-Pro/INFO/locust.main: Starting Locust 2.32.4
+[2026-10-16 11:05:50,792] Kshitijs-MacBook-Pro/INFO/locust.main: Run time limit set to 60 seconds
+[2026-10-16 11:05:50,793] Kshitijs-MacBook-Pro/INFO/locust.runners: Ramping to 2 users at a rate of 2.00 per second
+[2026-10-16 11:05:50,793] Kshitijs-MacBook-Pro/INFO/locust.runners: All users spawned: {"DisputeClient": 2} (2 total users)
+[2026-10-16 11:06:50,571] Kshitijs-MacBook-Pro/INFO/locust.main: --run-time limit reached, shutting down
+[2026-10-16 11:06:50,598] Kshitijs-MacBook-Pro/INFO/locust.main: Shutting down (exit code 0)
+Type     Name                                                                          # reqs      # fails |    Avg     Min     Max    Med |   req/s  failures/s
+--------|----------------------------------------------------------------------------|-------|-------------|-------|-------|-------|-------|--------|-----------
+GET      GET /v1/runs/{id}                                                                100     0(0.00%) |      4       1      19      3 |    1.68        0.00
+POST     POST /v1/disputes                                                                 12     0(0.00%) |     10       2      37      5 |    0.20        0.00
+RUN      complete_run                                                                      10     0(0.00%) |   8574    7071   10076   8100 |    0.17        0.00
+--------|----------------------------------------------------------------------------|-------|-------------|-------|-------|-------|-------|--------|-----------
+         Aggregated                                                                       122     0(0.00%) |    707       1   10076      4 |    2.05        0.00
+
+Response time percentiles (approximated)
+Type     Name                                                                                  50%    66%    75%    80%    90%    95%    98%    99%  99.9% 99.99%   100% # reqs
+--------|--------------------------------------------------------------------------------|--------|------|------|------|------|------|------|------|------|------|------|------
+GET      GET /v1/runs/{id}                                                                       3      4      5      5      7     11     18     20     20     20     20    100
+POST     POST /v1/disputes                                                                       6      6      9      9     32     38     38     38     38     38     38     12
+RUN      complete_run                                                                         9100   9100   9100  10000  10000  10000  10000  10000  10000  10000  10000     10
+--------|--------------------------------------------------------------------------------|--------|------|------|------|------|------|------|------|------|------|------|------
+         Aggregated                                                                              4      5      6      6     20   8100   9100  10000  10000  10000  10000    122
+

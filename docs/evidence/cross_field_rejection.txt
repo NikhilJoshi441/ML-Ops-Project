@@ -1,0 +1,2 @@
+{"error":"validation_failed","quarantine_id":"q_ee34381559e842af","errors":[{"field":"reporting.reported_at","error":"must not precede transaction.transaction_at","type":"cross_field"},{"field":"customer.credit_limit_inr","error":"required when account_type is CREDIT_CARD","type":"cross_field"},{"field":"transaction.channel","error":"a CREDIT_CARD account requires a card channel","type":"cross_field"},{"field":"transaction.auth_method","error":"UPI transactions use UPI_PIN, NONE or UNKNOWN","type":"cross_field"}],"note":"No agent run was started."}
+HTTP 422

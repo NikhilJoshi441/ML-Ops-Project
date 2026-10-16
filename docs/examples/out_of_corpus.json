@@ -1,0 +1,8 @@
+{
+  "client_reference": "demo-out-of-corpus-001",
+  "customer": {"customer_id": "CUST-000777", "account_type": "SAVINGS"},
+  "transaction": {"transaction_id": "TXN-DEMOOOC", "channel": "NET_BANKING", "amount_inr": 14500,
+                  "transaction_at": "2026-10-13T10:00:00Z", "auth_method": "UNKNOWN"},
+  "reporting": {"alert_received_at": "2026-10-13T10:01:00Z", "reported_at": "2026-10-15T10:00:00Z", "reporting_channel": "BRANCH"},
+  "complaint_text": "My loan EMI was debited twice this month and a cheque I deposited ten days ago has still not been credited. The branch also raised my loan interest rate without telling me."
+}

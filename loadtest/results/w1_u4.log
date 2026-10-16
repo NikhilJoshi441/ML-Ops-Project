@@ -1,0 +1,10 @@
+Traceback (most recent call last):
+  File "/private/tmp/claude-501/-Users-kshitij-Downloads-Mlops-assignment/c9c0ddc5-0840-4b3a-a256-28d5d737c658/scratchpad/venv/bin/locust", line 5, in <module>
+    from locust.main import main
+  File "/private/tmp/claude-501/-Users-kshitij-Downloads-Mlops-assignment/c9c0ddc5-0840-4b3a-a256-28d5d737c658/scratchpad/venv/lib/python3.12/site-packages/locust/__init__.py", line 16, in <module>
+    monkey.patch_all()
+  File "/private/tmp/claude-501/-Users-kshitij-Downloads-Mlops-assignment/c9c0ddc5-0840-4b3a-a256-28d5d737c658/scratchpad/venv/lib/python3.12/site-packages/gevent/monkey/__init__.py", line 700, in patch_all
+    from gevent import events
+  File "/private/tmp/claude-501/-Users-kshitij-Downloads-Mlops-assignment/c9c0ddc5-0840-4b3a-a256-28d5d737c658/scratchpad/venv/lib/python3.12/site-packages/gevent/events.py", line 75, in <module>
+    from zope.event import subscribers
+ModuleNotFoundError: No module named 'zope.event'

@@ -1,0 +1,9 @@
+{
+  "client_reference": "demo-section-4-1-001",
+  "customer": {"customer_id": "CUST-000041", "account_type": "SAVINGS"},
+  "transaction": {"transaction_id": "TXN-DEMO41A", "channel": "CARD_ONLINE", "amount_inr": 48000,
+                  "transaction_at": "2026-09-24T09:00:00Z", "card_last4": "4417", "auth_method": "OTP"},
+  "reporting": {"alert_received_at": "2026-09-24T09:01:00Z", "reported_at": "2026-10-15T11:00:00Z", "reporting_channel": "BRANCH"},
+  "complaint_text": "The bank's SMS alert for the transaction came the same day, but I did not notice it and reported it three weeks later. Before that, I had shared an OTP with someone who called saying he was from the bank.",
+  "customer_assertions": {"card_in_possession": "YES", "credentials_shared": "YES", "recognises_merchant": "NO"}
+}

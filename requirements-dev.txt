@@ -1,0 +1,4 @@
+-r requirements-ml.txt
+pytest==8.3.4
+fakeredis==2.39.0
+locust==2.32.4
